@@ -1,0 +1,18 @@
+{
+  "App": {
+    "webServer": {
+      "host": "127.0.0.1",
+      "port": 8080
+    }
+  },
+  "MySQL": {
+      "host": "127.0.0.1"
+  },
+  "MongoDB": {
+    "connectionUrl": "mongodb://127.0.0.1/testdb",
+    "options": {
+      "useCreateIndex": true,
+      "useNewUrlParser": true
+    }
+  }
+}
