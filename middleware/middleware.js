@@ -5,6 +5,11 @@ module.exports = (app) => {
         next();
     });
 
+    app.use((error, req, res, next) => {
+        console.log(error.stack);
+        next(error);
+    });
+
     // // catch 404
     // app.use((req, res, next) => {
     //     const error = new Error('File NOT Found');

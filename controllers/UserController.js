@@ -1,4 +1,6 @@
-var User = require('./../schema/User');
+const User = require('./../schema/User');
+// const ResultModel = require('./../model/ResultModel');
+const ResultModel = reqlib('/model/ResultModel');
 
 module.exports = {
     register : async (req, res, next) => {
@@ -29,7 +31,7 @@ module.exports = {
                 };
 
                 const existUser = await User.findOne({email: req_email}).exec();
-                console.log(existUser);
+                // console.log(existUser);
 
                 if (!existUser) {
                     const newUser = new User(userData);
@@ -44,7 +46,10 @@ module.exports = {
                     });
                 } else {
                     console.log('reg_jor');
-                    res.send('reg_jor');
+                    const errorObj = new ResultModel(200, 'reg_jor', {});
+                    console.log(JSON.stringify(errorObj));
+
+                    res.status(200).send(errorObj);
                 }
 
                 // insert data into db

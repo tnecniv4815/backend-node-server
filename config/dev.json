@@ -19,7 +19,6 @@
   "MongoDB": {
     "connectionUrl": "mongodb://localhost:27017/newsdb",
     "options": {
-      "useCreateIndex": true,
       "useNewUrlParser": true
     }
   }
