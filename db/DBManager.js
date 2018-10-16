@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 
 
 module.exports = {
-     connect:  () => {
+        connect:  () => {
         console.log('connect to db...');
 
         const options = config.get('MongoDB.options');
@@ -28,6 +28,29 @@ module.exports = {
         const url = config.get('MongoDB.connectionUrl');
 
         console.log('dbUrl: ' + url);
+
+
+
+
+
+        // mongoose.set('useCreateIndex', true);
+        // mongoose.connect(url, options, () => {
+        //     console.log('db connected');
+        // });
+        //
+        //
+        // const db = mongoose.connection;
+        //
+        // db.on('error', (error) => {
+        //     console.log('db error');
+        //     console.log(error);
+        // });
+
+         // db.once('open', () => {
+         //     console.log('db connected');
+         // })
+
+
 
         mongoose.connect(url, options, () => {
             console.log('db connected');

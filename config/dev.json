@@ -17,7 +17,7 @@
     "database": "testdb"
   },
   "MongoDB": {
-    "connectionUrl": "mongodb://localhost:27017/newsdb",
+    "connectionUrl": "mongodb://localhost:27017/mydb",
     "options": {
       "useNewUrlParser": true
     }

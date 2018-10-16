@@ -82,7 +82,7 @@ const rootRouter = (app) => {
     const articlesRouter = require('./articles');
     const userRouter = require('./user');
 
-    articlesRouter(router);
+    articlesRouter(app, router);
     userRouter(app, router);
 
     app.use('/', router);

@@ -36,6 +36,9 @@
 //
 // // module.exports = router;
 //
+
+const User = require('./../schema/User');
+
 module.exports = (app, router) => {
     // app.use('/user', router);
 
@@ -48,6 +51,17 @@ module.exports = (app, router) => {
     app.post('/user/register', userController.register);
     app.get('/user/login', userController.login);
 
+    app.get('/user/list', async (req, res, next) => {
+        console.log('list_all_user');
+
+        const existUser = await User.findOne({email: 'ross@example.com'}).exec();
+
+        console.log(existUser);
+
+        res.send(existUser);
+
+
+    });
 
 
 };

@@ -1,3 +1,8 @@
+const ArticleController = require('./../controllers/ArticleController');
+
+
+const ArticleContent = require('./../schema/ArticleContent');
+
 // var express = require('express');
 // var router = express.Router();
 //
@@ -30,14 +35,49 @@
 
 
 
-module.exports = (router) => {
+module.exports = (app, router) => {
 
-    // router.use('', (req, res, next) => {
-    //     next();
+    router.use('/article', (req, res, next) => {
+        console.log('article_route_middleware');
+        next();
+    });
+
+    // router.get('/list', (req, res, next) => {
+    //    res.send('article list');
     // });
 
-    router.get('/list', (req, res, next) => {
-       res.send('article list');
+    router.get('/article/list', ArticleController.list);
+
+    router.post('/article/', (req, res, next) => {
+        console.log('hahaha');
+        console.log(req.body);
+
+        res.send('asdf');
     });
+
+/*
+    router.get('/list', (req, res, next) => {
+        console.log('lalala');
+
+        const Article = require('./../schema/Article');
+
+        // Article.find({}).then((result) => {
+        //     console.log('ggg');
+        //     console.log(result);
+        //
+        //     res.send(result);
+        // });
+
+        ArticleContent.find({}).then((result) => {
+            console.log('hhh');
+            console.log(result);
+
+            res.send(result);
+        });
+
+
+    });
+    */
+
 
 };
