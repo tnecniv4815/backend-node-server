@@ -1,7 +1,9 @@
 var mongoose = require('mongoose');
 
-var ArticleContentSchema = new mongoose.Schema({
-    article_id: { type: mongoose.Schema.Types.ObjectId, ref: 'article' },
+const Schema = mongoose.Schema;
+
+var ArticleContentSchema = new Schema({
+    article_id: { type: Schema.Types.ObjectId, ref: 'Article' },
     type: { type: Number },
     subtitle: { type: String },
     media_url: { type: String },

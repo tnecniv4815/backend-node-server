@@ -46,7 +46,7 @@ module.exports = (app, router) => {
     //    res.send('article list');
     // });
 
-    router.get('/article/list', ArticleController.list);
+    router.post('/article/list', ArticleController.list);
 
     router.post('/article/', (req, res, next) => {
         console.log('hahaha');

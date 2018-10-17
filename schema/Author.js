@@ -1,10 +1,15 @@
 const mongoose = require('mongoose');
 
-const AuthorSchema = new mongoose.Schema({
-    display_name: { type: String, required: true },
-    username: { type: String, required: true },
-    password: { type: String, required: true },
-    created_at: { type: Date, default: Date.now() },
+const Schema = mongoose.Schema;
+
+const AuthorSchema = new Schema({
+    name: { type: String },
+    age: { type: Number },
+
+    books: [
+        { type: Schema.Types.ObjectId, ref: 'Book' }
+    ]
+
 });
 
 const Author = mongoose.model('Author', AuthorSchema);
