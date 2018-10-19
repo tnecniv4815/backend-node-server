@@ -68,6 +68,7 @@ module.exports = {
 
             let sizePerPage = req_item_per_page;
             let pageNum = req_page_no;
+            let carouselLength = 3;
 
             console.log('req_page_no: ' + req_page_no);
             console.log('req_item_per_page: ' + req_item_per_page);
@@ -77,14 +78,36 @@ module.exports = {
 
             let articles;
 
-            Article.find()
-                .limit(sizePerPage)
-                .skip(sizePerPage * pageNum)
+
+            Article
+                .find({}, '_id title thumbnail posted_at')
+                .limit(sizePerPage + carouselLength)
+                .skip(sizePerPage * pageNum + carouselLength)
                 .sort({'posted_at': -1})
-                .populate([{path: 'contents', model: 'ArticleContent'}])
+                // .populate( 'contents', '-_id type subtitle media_url content')
                 .then((result) => {
                     console.log(result);
-                    res.send(result)
+                    console.log(result.length);
+
+                    let responseModel = {};
+
+                    if (result.length >= carouselLength) {
+                        const tmpCarouseList = _.slice(result, 0, carouselLength);
+                        const tmpList = _.slice(result, carouselLength, result.length);
+
+                        responseModel = {
+                            carousel: tmpCarouseList,
+                            list: tmpList
+                        };
+
+                    } else {
+                        responseModel = {
+                            carousel: result,
+                            list: []
+                        };
+                    }
+
+                    res.send(responseModel)
                 })
             ;
 
