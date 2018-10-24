@@ -86,8 +86,10 @@ module.exports = {
                 .sort({'posted_at': -1})
                 // .populate( 'contents', '-_id type subtitle media_url content')
                 .then((result) => {
-                    console.log(result);
+                    // console.log(result);
                     console.log(result.length);
+
+
 
                     let responseModel = {};
 
@@ -123,11 +125,50 @@ module.exports = {
 
     articleDetailById : (req, res, next) => {
 
-        const id = req.params.id;
+        const req_article_id = req.body.article_id;
+        console.log('article_id: ' + req_article_id);
 
-        console.log('id: ' + id);
+        // ObjectId("5bc99072606d563e9f5a965c")
 
-        res.send('123123 Audi Q7, BMW X5, Mercedes GL');
+        // if (_.isNil(req_article_id)) {
+        //     res.status(500).send("No article id");
+        // } else {
+        //
+        // }
+
+        try {
+
+            Article
+                .findOne({ _id: req_article_id })
+                // .findOne({ _id: id }, '_id title thumbnail posted_at')
+                .populate( 'contents', '-_id type subtitle media_url content')
+                .then((result) => {
+                    // console.log(result);
+                    console.log(result);
+
+                    let responseModel = {};
+
+                    if (!_.isNil(result)) {
+                        responseModel = result;
+                    }
+
+                    res.send(responseModel)
+                })
+            ;
+
+        } catch (e) {
+            return res.status(500).send(e);
+        }
+
+        // res.send('123123 Audi Q7, BMW X5, Mercedes GL');
+
+
+
+        // ObjectId("5bcd74af606d566cb74636eb")
+
+
+
+
     },
 
 

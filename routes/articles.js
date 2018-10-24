@@ -47,6 +47,7 @@ module.exports = (app, router) => {
     // });
 
     router.post('/article/list', ArticleController.list);
+    router.post('/article/detail', ArticleController.articleDetailById);
 
     router.post('/article/', (req, res, next) => {
         console.log('hahaha');
