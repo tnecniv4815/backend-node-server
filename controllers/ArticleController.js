@@ -68,7 +68,7 @@ module.exports = {
 
             let sizePerPage = req_item_per_page;
             let pageNum = req_page_no;
-            let carouselLength = 3;
+            let carouselLength = 0;
 
             console.log('req_page_no: ' + req_page_no);
             console.log('req_item_per_page: ' + req_item_per_page);
