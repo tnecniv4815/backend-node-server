@@ -90,6 +90,10 @@ const rootRouter = (app) => {
 
     // app.use('/article', articlesRouter);
 
+    app.use('/test', (req, res, next) => {
+        res.send('greeting');
+    })
+
     // router.use((req, res, next) => {
     //     console.log('middleware: ' + req.method, req.url);
     //
