@@ -6,7 +6,7 @@ const ArticleSchema = new Schema({
     title: { type: String },
     thumbnail: { type: String },
     posted_at: { type: Date },
-    created_at: { type: Date },
+    created_at: { type: Date, default: Date.now },
 
     contents: [
         { type: Schema.Types.ObjectId, ref: 'ArticleContent' }

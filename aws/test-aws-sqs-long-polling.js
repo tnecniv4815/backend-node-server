@@ -2,6 +2,7 @@
 
 const cron = require('node-cron');
 const AWS = require('aws-sdk');
+const _ = require('lodash');
 
 const region = 'ap-southeast-1';
 
@@ -24,9 +25,12 @@ console.log('starting....');
 
 
 
-const task = cron.schedule('*/10 * * * * *', scheduleTask);
+// const task = cron.schedule('*/10 * * * * *', scheduleTask);
 
 // task.start();
+
+// test only
+// monitorSQS(articleQueueUrl);
 
 
 console.log('finishing....');
@@ -64,15 +68,34 @@ function monitorSQS(queueUrl) {
             "All"
         ],
 
-
     };
 
     sqs.receiveMessage(params, (err, data) => {
         if (err) {
             console.log('error: ', err);
         } else {
-            console.log('success: ', data);
+            // console.log('success: ', JSON.stringify(data));
+
+            const messages = data.Messages;
+
+            _.forEach(messages, function(message) {
+                console.log('message: ', JSON.stringify(message));
+            });
+
         }
     });
 
+
+
 }
+
+
+function start() {
+    console.log('Starting Long Polling');
+}
+
+function stop() {
+    console.log('Starting Long Polling');
+}
+
+
