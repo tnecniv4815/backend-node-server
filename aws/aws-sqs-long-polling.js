@@ -11,13 +11,16 @@ const region = 'ap-southeast-1';
 // hardcoded
 const articleQueueUrl = 'https://sqs.ap-southeast-1.amazonaws.com/340288593666/ArticleQueue';
 
+const articleLinkQueueName = 'ArticleLinkQueue';
+const articleQueueName = 'ArticleQueue';
+
 // const task = cron.schedule('*/10 * * * * *', () => {
 //     scheduleTask();
 // }, {
 //     scheduled: false
 // });
 
-const task = cron.schedule('*/10 * * * * *', scheduleTask, {
+const task = cron.schedule('*/5 * * * * *', scheduleTask, {
     scheduled: false
 });
 
@@ -113,25 +116,25 @@ function monitorSQS(queueUrl) {
                                 .then(result => {
                                     console.log('insert_result: ', result);
 
-                                    // deleteMessage(articleQueueUrl, receiptHandle)
-                                    //     .then(data => {
-                                    //         console.log(`${ messageId } inserted into db, posted_at: ${ sqsArticleObj.posted_at } , title: ${ sqsArticleObj.title }`);
-                                    //     })
-                                    //     .catch(err => {
-                                    //         console.log('delete SQS message failure: ', err);
-                                    //     });
+                                    deleteMessage(articleQueueUrl, receiptHandle)
+                                        .then(data => {
+                                            console.log(`${ messageId } inserted into db, posted_at: ${ sqsArticleObj.posted_at } , title: ${ sqsArticleObj.title }`);
+                                        })
+                                        .catch(err => {
+                                            console.log('delete SQS message failure: ', err);
+                                        });
                                 })
                                 .catch(err => {
                                     console.log('insert article from SQS failure: ', err);
                                 });
                         } else {
-                            // deleteMessage(articleQueueUrl, receiptHandle)
-                            //     .then(data => {
-                            //         console.log(`${ messageId } deleted duplicated message from SQS, posted_at: ${ sqsArticleObj.posted_at } , title: ${ sqsArticleObj.title }`);
-                            //     })
-                            //     .catch(err => {
-                            //         console.log('delete SQS message failure: ', err);
-                            //     });
+                            deleteMessage(articleQueueUrl, receiptHandle)
+                                .then(data => {
+                                    console.log(`${ messageId } deleted duplicated message from SQS, posted_at: ${ sqsArticleObj.posted_at } , title: ${ sqsArticleObj.title }`);
+                                })
+                                .catch(err => {
+                                    console.log('delete SQS message failure: ', err);
+                                });
                         }
 
                     })

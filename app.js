@@ -12,8 +12,8 @@ var app = express();
 
 const port = config.get('App.webServer.port');
 
-const awsSQSLongPolling = require('./aws/aws-sqs-long-polling');
-awsSQSLongPolling.start();
+const awsLongPolling = require('./aws/aws-long-polling');
+awsLongPolling.start();
 
 // var config = require('./config/config');
 
