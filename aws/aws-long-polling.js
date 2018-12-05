@@ -318,6 +318,8 @@ function createObjectInS3Bucket(bucketName, directory, fileNameWithExt, body) {
     return s3.upload(params).promise();
 }
 
+function moveObjectInS3(bucketName, fromDirectory, toDirectory, fileNameWithExt) {
 
+}
 
 

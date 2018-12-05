@@ -3,17 +3,40 @@ global.reqlib = require('app-root-path').require;
 global._ = require('lodash');
 const bodyParser = require('body-parser');
 const path = require('path');
+const AWS = require('aws-sdk');
+global.AWSManager = require('./db/AWSManager');
+global.moment = require('moment');
 
 require('dotenv').config();
 global.config = require('config');
 var environment = process.env.NODE_ENV;
 
+global.AWSConfig = {
+    region : process.env.AWS_REGION,
+    s3Articles : process.env.AWS_S3_FOLDER_ARTICLE,
+    s3ArticleLinks : process.env.AWS_S3_FOLDER_ARTICLE_LINK,
+    s3ArticleDetail : process.env.AWS_S3_FOLDER_ARTICLE_DETAIL,
+    s3Media : process.env.AWS_S3_FOLDER_MEDIA,
+    ddbTableNameArticle : process.env.AWS_DDB_TABLE_NAME_ARTICLE,
+    ddbTableNameArticleDetail : process.env.AWS_DDB_TABLE_NAME_ARTICLE_DETAIL,
+};
+
+// AWS setup
+global.ddb = new AWS.DynamoDB({
+    region: AWSConfig.region
+});
+global.docClient = new AWS.DynamoDB.DocumentClient({
+    region: AWSConfig.region
+});
+
+
+
 var app = express();
 
 const port = config.get('App.webServer.port');
 
-const awsLongPolling = require('./aws/aws-long-polling');
-awsLongPolling.start();
+// const awsLongPolling = require('./aws/aws-long-polling');
+// awsLongPolling.start();
 
 // var config = require('./config/config');
 
