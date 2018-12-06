@@ -184,18 +184,46 @@ module.exports = {
             const items = await AWSManager.getArticles(fromDateTime, toDateTime);
             if (!_.isNull(items) && items.length > 0) {
                 console.log(`getArticles succeeded. size: ${items.length}`);
-                items.forEach(function(item) {
+
+                for (const item of items) {
                     console.log(`${JSON.stringify(item)}`);
                     // console.log(`${item.created_at} : ${item.title}`);
                     const tUrl = item.thumbnailUrl;
                     const tFilename = item.thumbnailFilename;
 
+                    let thumbnailPath = '';
+
+                    const imageResult = await AWSManager.getImageFromUrl(tUrl);
+                    if (!_.isNull(imageResult)) {
+                        console.log(`\n\n\n`);
+                        console.log(`imageResult: ${ imageResult.Body.length } , filename: ${ tFilename }`);
+
+                        const filePath = path.join(rootPath, imageDestPath);
+                        console.log(`path: ${ filePath }`);
+
+
+
+                        const fullPath = filePath + tFilename;
+                        const isExist = await Util.isFileExist(fullPath);
+                        if (!isExist) {
+                            const savedFileName = await Util.saveImageFromS3(imageResult, filePath, tFilename);
+                            if (!_.isNull(savedFileName)) {
+                                console.log(`savedResult success = ${savedFileName}`);
+                                thumbnailPath = Util.getHostUrl(req) + '/' + imageDestPath +  savedFileName;
+                            }
+                        } else {
+                            thumbnailPath = Util.getHostUrl(req) + '/' + imageDestPath + tFilename;
+                        }
+
+                    }
+
                     const newObj = {
                         title : item.title,
+                        thumbnail : thumbnailPath,
                     };
 
                     articles.push(newObj);
-                });
+                }
             }
                 // .then(items => {
                 //     console.log(`getArticles succeeded. size: ${items.length}`);

@@ -2,17 +2,23 @@ const express = require('express');
 global.reqlib = require('app-root-path').require;
 global._ = require('lodash');
 const bodyParser = require('body-parser');
-const path = require('path');
+global.path = require('path');
 const AWS = require('aws-sdk');
 global.AWSManager = require('./db/AWSManager');
+global.Util = require('./Util/Util');
 global.moment = require('moment');
+global.request = require('request');
+global.fs = require('fs');
 
 require('dotenv').config();
 global.config = require('config');
 var environment = process.env.NODE_ENV;
 
+global.imageDestPath = process.env.IMAGE_FILE_DEST_PATH;
+
 global.AWSConfig = {
     region : process.env.AWS_REGION,
+    bucketName_Article : process.env.AWS_BUCKET_NAME,
     s3Articles : process.env.AWS_S3_FOLDER_ARTICLE,
     s3ArticleLinks : process.env.AWS_S3_FOLDER_ARTICLE_LINK,
     s3ArticleDetail : process.env.AWS_S3_FOLDER_ARTICLE_DETAIL,
@@ -29,6 +35,8 @@ global.docClient = new AWS.DynamoDB.DocumentClient({
     region: AWSConfig.region
 });
 
+global.s3 = new AWS.S3();
+
 
 
 var app = express();
@@ -42,7 +50,9 @@ const port = config.get('App.webServer.port');
 
 
 
-console.log(__dirname);
+// console.log(__dirname);
+
+global.rootPath = __dirname;
 
 app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use('/images', express.static(path.join(__dirname, 'images')));

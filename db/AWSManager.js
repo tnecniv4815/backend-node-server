@@ -50,7 +50,33 @@ module.exports = {
     },
 
     getImageFromUrl : (imageUrl) => {
-
+        return new Promise((resolve, reject) => {
+            getS3Object(AWSConfig.bucketName_Article, imageUrl)
+                .then(data => {
+                    resolve(data);
+                })
+                .catch(err => {
+                    reject(err);
+                });
+        });
     },
 
+
+
+
 };
+
+function getS3Object(bucketName, key) {
+    return new Promise((resolve, reject) => {
+        const params = {
+            Bucket: bucketName,
+            Key: key
+        };
+        s3.getObject(params, function(err, data) {
+            if (err) {
+                reject(err);
+            }
+            resolve(data);
+        });
+    });
+}
