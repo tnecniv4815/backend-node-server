@@ -4,9 +4,9 @@ const ArticleContent = require('./../schema/ArticleContent');
 const User = require('./../schema/User');
 
 module.exports = {
-    articleDetail : (req, res, next) => {
-        res.send('articleDetail');
-    },
+    // articleDetail : (req, res, next) => {
+    //     res.send('articleDetail');
+    // },
 
     list : async (req, res, next) => {
         console.log('get_article_list');
@@ -188,6 +188,7 @@ module.exports = {
                 for (const item of items) {
                     console.log(`${JSON.stringify(item)}`);
                     // console.log(`${item.created_at} : ${item.title}`);
+                    const articleId = item.articleId;
                     const tUrl = item.thumbnailUrl;
                     const tFilename = item.thumbnailFilename;
 
@@ -218,6 +219,7 @@ module.exports = {
                     }
 
                     const newObj = {
+                        id : articleId,
                         title : item.title,
                         thumbnail : thumbnailPath,
                     };
@@ -352,49 +354,44 @@ module.exports = {
 
     articleDetailById : (req, res, next) => {
 
-        const req_article_id = req.body.article_id;
-        console.log('article_id: ' + req_article_id);
-
-        // ObjectId("5bc99072606d563e9f5a965c")
-
-        // if (_.isNil(req_article_id)) {
-        //     res.status(500).send("No article id");
-        // } else {
+        // const req_article_id = req.body.article_id;
+        // console.log('article_id: ' + req_article_id);
         //
+        // try {
+        //
+        //     Article
+        //         .findOne({ _id: req_article_id })
+        //         // .findOne({ _id: id }, '_id title thumbnail posted_at')
+        //         .populate( 'contents', '-_id type subtitle media_url content')
+        //         .then((result) => {
+        //             // console.log(result);
+        //             console.log(result);
+        //
+        //             let responseModel = {};
+        //
+        //             if (!_.isNil(result)) {
+        //                 responseModel = result;
+        //             }
+        //
+        //             res.send(responseModel)
+        //         })
+        //     ;
+        //
+        // } catch (e) {
+        //     return res.status(500).send(e);
         // }
 
-        try {
 
-            Article
-                .findOne({ _id: req_article_id })
-                // .findOne({ _id: id }, '_id title thumbnail posted_at')
-                .populate( 'contents', '-_id type subtitle media_url content')
-                .then((result) => {
-                    // console.log(result);
-                    console.log(result);
+        // 9bd620f9f7e8cb2925b8dce536387fbb
+        const req_article_id = req.params.id;
 
-                    let responseModel = {};
+        if (!_.isNull(req_article_id) && !_.isNil(req_article_id) && !_.isUndefined(req_article_id)) {
 
-                    if (!_.isNil(result)) {
-                        responseModel = result;
-                    }
-
-                    res.send(responseModel)
-                })
-            ;
-
-        } catch (e) {
-            return res.status(500).send(e);
         }
 
-        // res.send('123123 Audi Q7, BMW X5, Mercedes GL');
+        const response = 'articleId: ' + req_article_id;
 
-
-
-        // ObjectId("5bcd74af606d566cb74636eb")
-
-
-
+        res.status(200).send(response);
 
     },
 

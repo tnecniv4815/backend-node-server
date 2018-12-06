@@ -8,7 +8,7 @@ module.exports = {
 
             const params = {
                 TableName: AWSConfig.ddbTableNameArticle,
-                ProjectionExpression: 'created_at, title, thumbnailUrl, thumbnailFilename',
+                ProjectionExpression: 'articleId, created_at, title, thumbnailUrl, thumbnailFilename',
                 FilterExpression: '#createdDateTime between :fromDateTime and :toDateTime',
                 ExpressionAttributeNames: {
                     '#createdDateTime': 'created_at',
