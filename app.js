@@ -12,6 +12,7 @@ global.fs = require('fs');
 
 require('dotenv').config();
 global.config = require('config');
+global.Const = require('./Util/Const');
 var environment = process.env.NODE_ENV;
 
 global.imageDestPath = process.env.IMAGE_FILE_DEST_PATH;

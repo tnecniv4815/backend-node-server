@@ -194,7 +194,14 @@ module.exports = {
 
                     let thumbnailPath = '';
 
-                    const imageResult = await AWSManager.getImageFromUrl(tUrl);
+                    const imgUrl = await Util.convertS3ImageToHostUrl(req, tFilename, tUrl);
+                    if (!_.isEmpty(imgUrl)) {
+                        console.log(`imgUrl: ${ imgUrl } `);
+                        thumbnailPath = imgUrl;
+                    }
+
+                    /*
+                    const imageResult = await AWSManager.getImageFromUrl(AWSConfig.bucketName_Article, tUrl);
                     if (!_.isNull(imageResult)) {
                         console.log(`\n\n\n`);
                         console.log(`imageResult: ${ imageResult.Body.length } , filename: ${ tFilename }`);
@@ -217,6 +224,9 @@ module.exports = {
                         }
 
                     }
+                    */
+
+
 
                     const newObj = {
                         id : articleId,
@@ -352,7 +362,7 @@ module.exports = {
 
     },
 
-    articleDetailById : (req, res, next) => {
+    articleDetailById : async (req, res, next) => {
 
         // const req_article_id = req.body.article_id;
         // console.log('article_id: ' + req_article_id);
@@ -382,16 +392,56 @@ module.exports = {
         // }
 
 
-        // 9bd620f9f7e8cb2925b8dce536387fbb
+        // 33d0169f95598e97b98543969fdc1490
         const req_article_id = req.params.id;
 
-        if (!_.isNull(req_article_id) && !_.isNil(req_article_id) && !_.isUndefined(req_article_id)) {
+        let messages = [];
 
+        if (!_.isNull(req_article_id) && !_.isNil(req_article_id) && !_.isUndefined(req_article_id)) {
+            const contents = await AWSManager.getArticleContents(req_article_id);
+            if (!_.isNull(contents)) {
+                console.log(`s3Result: ${ JSON.stringify(contents) }`);
+
+                for (const object of contents) {
+                    let tmpMsg = '';
+                    let type = object.contentType;
+                    switch (object.contentType) {
+                        case Const.ARTICLE_CONTENT_TYPE.TEXT: {
+                            tmpMsg = object.content;
+                            break;
+                        }
+                        case Const.ARTICLE_CONTENT_TYPE.IMAGE: {
+                            const tFilename = object.content.split('/').pop();
+                            const tUrl = object.content;
+
+                            const imgUrl = await Util.convertS3ImageToHostUrl(req, tFilename, tUrl);
+                            if (!_.isEmpty(imgUrl)) {
+                                console.log(`imgUrl: ${ imgUrl } `);
+                                tmpMsg = imgUrl;
+                            }
+
+                            break;
+                        }
+                    }
+
+                    if (!_.isEmpty(tmpMsg)) {
+                        const newObj = {
+                            content: tmpMsg,
+                            type: type,
+                        };
+                        messages.push(newObj);
+                    }
+
+
+
+                }
+
+            }
         }
 
         const response = 'articleId: ' + req_article_id;
 
-        res.status(200).send(response);
+        res.status(200).send(messages);
 
     },
 

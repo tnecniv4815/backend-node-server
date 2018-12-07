@@ -51,6 +51,34 @@ module.exports = {
         return req.protocol + '://' + req.get('host');
     },
 
+    convertS3ImageToHostUrl : async (req, filename, s3Url) => {
+        let hostImgPath = '';
+
+        const imageResult = await AWSManager.getImageFromUrl(AWSConfig.bucketName_Article, s3Url);
+        if (!_.isNull(imageResult)) {
+            // console.log(`\n\n\n`);
+            // console.log(`imageResult: ${ imageResult.Body.length } , filename: ${ filename }`);
+
+            const filePath = path.join(rootPath, imageDestPath);
+            // console.log(`path: ${ filePath }`);
+
+            const fullPath = filePath + filename;
+            const isExist = await Util.isFileExist(fullPath);
+            if (!isExist) {
+                const savedFileName = await Util.saveImageFromS3(imageResult, filePath, filename);
+                if (!_.isNull(savedFileName)) {
+                    // console.log(`savedResult success = ${savedFileName}`);
+                    hostImgPath = Util.getHostUrl(req) + '/' + imageDestPath +  savedFileName;
+                }
+            } else {
+                hostImgPath = Util.getHostUrl(req) + '/' + imageDestPath + filename;
+            }
+
+        }
+
+        return hostImgPath;
+    },
+
     // loadImageFromUrl : (imageUrl) => {
     //     return new Promise((resolve, reject) => {
     //
